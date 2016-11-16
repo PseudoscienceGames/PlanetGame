@@ -1,9 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Island : MonoBehaviour
 {
+	public List<Transform> neighbors = new List<Transform>();
 	public float mag;
+	public int index;
+
+	void OnTriggerEnter(Collider neighbor)
+	{
+		neighbors.Add(neighbor.transform);
+	}
+	void OnTriggerExit(Collider neighbor)
+	{
+		neighbors.Remove(neighbor.transform);
+	}
 
 	public IEnumerator Move(Vector3 loc)
 	{
