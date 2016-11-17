@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Island : MonoBehaviour
+public class Section : MonoBehaviour
 {
 	public List<Transform> neighbors = new List<Transform>();
 	public float mag;

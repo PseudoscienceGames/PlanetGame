@@ -33,7 +33,7 @@ public class FibonacciSphere : MonoBehaviour
 	{
 		GameObject currentTest = Instantiate(test) as GameObject;
 		sections.Add(currentTest);
-		currentTest.GetComponent<Island>().index = sections.IndexOf(currentTest);
+		currentTest.GetComponent<Section>().index = sections.IndexOf(currentTest);
 		UpdateSections();
 	}
 
@@ -61,7 +61,7 @@ public class FibonacciSphere : MonoBehaviour
 			float x = Mathf.Cos(phi) * r;
 			float z = Mathf.Sin(phi) * r;
 			Vector3 loc = new Vector3(x, y, z);
-			StartCoroutine(sections[i].GetComponent<Island>().Move(loc * radius));
+			StartCoroutine(sections[i].GetComponent<Section>().Move(loc * radius));
 		}
 	}
 }
