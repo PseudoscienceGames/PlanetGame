@@ -5,10 +5,6 @@ public class Selector : MonoBehaviour
 {
 	public GameObject sel1;
 	public GameObject sel2;
-
-	public Material selected;
-	public Material neighbor;
-	public Material def;
 	
 	void Update()
 	{
@@ -23,19 +19,9 @@ public class Selector : MonoBehaviour
 					if (sel1 == null)
 					{
 						sel1 = hit.transform.gameObject;
-						sel1.transform.GetChild(0).GetComponent<Renderer>().material = selected;
-						foreach(Transform neigh in sel1.GetComponent<Section>().neighbors)
-						{
-							neigh.transform.GetChild(0).GetComponent<Renderer>().material = neighbor;
-						}
 					}
 					else if (sel1 != null && sel2 == null && sel1.GetComponent<Section>().neighbors.Contains(hit.transform))
 					{
-						sel1.transform.GetChild(0).GetComponent<Renderer>().material = def;
-						foreach (Transform neigh in sel1.GetComponent<Section>().neighbors)
-						{
-							neigh.transform.GetChild(0).GetComponent<Renderer>().material = def;
-						}
 						sel2 = hit.transform.gameObject;
 						Vector3 loc1 = sel1.transform.position;
 						Vector3 loc2 = sel2.transform.position;

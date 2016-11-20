@@ -5,14 +5,16 @@ using System.Collections.Generic;
 public class Asteroid : MonoBehaviour
 {
 	public Vector3 rot;
+	public float radius;
+	public bool flo;
 
-	public Dictionary<Resource, float> resources = new Dictionary<Resource, float>();
+	public List<int> resources = new List<int>();
 
 	void Start()
 	{
 		for(int i = 0; i < (int)Resource.Count; i++)
 		{
-			resources.Add((Resource)i, Random.Range(0f, 1000f));
+			resources.Add(Random.Range(0, 1000));
 		}
 	}
 
@@ -22,36 +24,18 @@ public class Asteroid : MonoBehaviour
 		transform.rotation *= Quaternion.AngleAxis(rot.magnitude * Time.deltaTime, rot);
 	}
 
-	public Dictionary<Resource, float> Mine(float speed)
+	public Resource Mine()
 	{
-		float total = 0;
-		int bre = 0;
-		Dictionary<Resource, float> minedResources = new Dictionary<Resource, float>();
-		while (total < speed && bre < 10)
+		List<int> pos = new List<int>();
+		for (int i = 0; i < resources.Count; i++)
 		{
-			bre++;
-			Resource randResource = (Resource)Random.Range(0, (int)Resource.Count);
-			float amt;
-			if (resources[randResource] > 0)
-			{
-				amt = Random.Range(0f, speed);
-				if (amt > speed - total)
-					amt = speed - total;
-				if (amt > resources[randResource])
-					amt = resources[randResource];
-				if (minedResources.ContainsKey(randResource))
-					minedResources[randResource] += amt;
-				else
-					minedResources.Add(randResource, amt);
-				resources[randResource] -= amt;
-			}
+			if (resources[i] > 0)
+				pos.Add(i);
 		}
-		string resourceCount = "";
+		Resource rec = (Resource)pos[Random.Range(0, pos.Count)];
+		resources[(int)rec]--;
+		return rec;
 
-		foreach (Resource rec in resources.Keys)
-			resourceCount += "(" + rec + ": " + resources[rec] + ")";
-		Debug.Log(resourceCount);
-		return minedResources;
 	}
 }
 

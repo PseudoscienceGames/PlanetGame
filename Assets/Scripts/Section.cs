@@ -7,14 +7,31 @@ public class Section : MonoBehaviour
 	public List<Transform> neighbors = new List<Transform>();
 	public float mag;
 	public int index;
+	public List<int> resources = new List<int>();
+
+	void Start()
+	{
+		for (int i = 0; i < (int)Resource.Count; i++)
+		{
+			resources.Add(0);
+		}
+	}
 
 	void OnTriggerEnter(Collider neighbor)
 	{
-		neighbors.Add(neighbor.transform);
+		if (neighbor.GetComponent<Section>() != null)
+			neighbors.Add(neighbor.transform);
 	}
 	void OnTriggerExit(Collider neighbor)
 	{
-		neighbors.Remove(neighbor.transform);
+		if (neighbor.GetComponent<Section>() != null)
+			neighbors.Remove(neighbor.transform);
+	}
+
+	public void MoveInstant(Vector3 pos)
+	{
+		transform.position = pos;
+		transform.LookAt(Vector3.zero);
 	}
 
 	public IEnumerator Move(Vector3 loc)
@@ -34,5 +51,21 @@ public class Section : MonoBehaviour
 	void Update()
 	{
 		mag = transform.position.magnitude;
+		if (GameObject.Find("Asteroid").GetComponent<Asteroid>().flo)
+		{
+			float radius = GameObject.Find("Asteroid").GetComponent<Asteroid>().radius;
+            Ray ray = new Ray(transform.position, -transform.position);
+			RaycastHit hit;
+			int mask = 1 << 8;
+			if (Physics.Raycast(ray, out hit, 100, mask))
+			{
+				transform.GetChild(0).position = transform.position.normalized * (radius + 0.5f + (hit.point.magnitude - radius));
+			}
+		}
+	}
+
+	public void SetRadius(float rad)
+	{
+		GetComponent<SphereCollider>().radius = rad;
 	}
 }
