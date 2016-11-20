@@ -35,7 +35,6 @@ public class FibonacciSphere : MonoBehaviour
 	{
 		GameObject currentTest = Instantiate(test) as GameObject;
 		sections.Add(currentTest);
-		currentTest.GetComponent<Section>().index = sections.IndexOf(currentTest);
 		//UpdateSections();
 	}
 

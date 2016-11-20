@@ -6,7 +6,6 @@ public class Miner : Section
 {
 	public Asteroid asteroid;
 	public float speed;
-	public GameObject output;
 
 	void Start()
 	{
@@ -16,7 +15,10 @@ public class Miner : Section
 
 	void Mine()
 	{
-		Resource rec = asteroid.Mine();
-		GetComponent<Section>().resources[(int)rec]++;
+		if (outputs.Count > 0)
+		{
+			Resource rec = asteroid.Mine();
+			Send(rec, outputs[0]);
+		}
 	}
 }

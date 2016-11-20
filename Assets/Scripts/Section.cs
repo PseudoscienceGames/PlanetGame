@@ -5,9 +5,10 @@ using System.Collections.Generic;
 public class Section : MonoBehaviour
 {
 	public List<Transform> neighbors = new List<Transform>();
-	public float mag;
-	public int index;
 	public List<int> resources = new List<int>();
+	public List<Section> inputs = new List<Section>();
+	public List<Section> outputs = new List<Section>();
+	public bool ready;
 
 	void Start()
 	{
@@ -21,6 +22,7 @@ public class Section : MonoBehaviour
 	{
 		if (neighbor.GetComponent<Section>() != null)
 			neighbors.Add(neighbor.transform);
+		else Debug.Log(neighbor.transform.name);
 	}
 	void OnTriggerExit(Collider neighbor)
 	{
@@ -50,7 +52,6 @@ public class Section : MonoBehaviour
 
 	void Update()
 	{
-		mag = transform.position.magnitude;
 		if (GameObject.Find("Asteroid").GetComponent<Asteroid>().flo)
 		{
 			float radius = GameObject.Find("Asteroid").GetComponent<Asteroid>().radius;
@@ -67,5 +68,20 @@ public class Section : MonoBehaviour
 	public void SetRadius(float rad)
 	{
 		GetComponent<SphereCollider>().radius = rad;
+	}
+
+	public void Send(Resource rec, Section to)
+	{
+		if(to.ready)
+			to.Recieve(rec);
+		else
+		{
+			Debug.Log(to.name + " not ready");
+		}
+	}
+
+	public virtual void Recieve(Resource rec)
+	{
+
 	}
 }
