@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Section : MonoBehaviour
 {
-	public List<Transform> neighbors = new List<Transform>();
+	public List<Section> neighbors = new List<Section>();
 	public List<int> resources = new List<int>();
 	public List<Section> inputs = new List<Section>();
 	public List<Section> outputs = new List<Section>();
@@ -18,17 +18,17 @@ public class Section : MonoBehaviour
 		}
 	}
 
-	void OnTriggerEnter(Collider neighbor)
-	{
-		if (neighbor.GetComponent<Section>() != null)
-			neighbors.Add(neighbor.transform);
-		else Debug.Log(neighbor.transform.name);
-	}
-	void OnTriggerExit(Collider neighbor)
-	{
-		if (neighbor.GetComponent<Section>() != null)
-			neighbors.Remove(neighbor.transform);
-	}
+	//void OnTriggerEnter(Collider neighbor)
+	//{
+	//	if (neighbor.GetComponent<Section>() != null)
+	//		neighbors.Add(neighbor.transform);
+	//	else Debug.Log(neighbor.transform.name);
+	//}
+	//void OnTriggerExit(Collider neighbor)
+	//{
+	//	if (neighbor.GetComponent<Section>() != null)
+	//		neighbors.Remove(neighbor.transform);
+	//}
 
 	public void MoveInstant(Vector3 pos)
 	{
@@ -60,7 +60,7 @@ public class Section : MonoBehaviour
 			int mask = 1 << 8;
 			if (Physics.Raycast(ray, out hit, 100, mask))
 			{
-				transform.GetChild(0).position = transform.position.normalized * (radius + 0.5f + (hit.point.magnitude - radius));
+				transform.GetChild(0).position = transform.position.normalized * (hit.point.magnitude + 0.5f);
 			}
 		}
 	}
@@ -83,5 +83,16 @@ public class Section : MonoBehaviour
 	public virtual void Recieve(Resource rec)
 	{
 
+	}
+
+	public void CheckNeighbors()
+	{
+		Collider[] cols = Physics.OverlapSphere(transform.position, 1);
+		neighbors.Clear();
+		foreach(Collider col in cols)
+		{
+			if(col.GetComponent<Section>() != null && col.GetComponent<Section>() != this)
+				neighbors.Add(col.GetComponent<Section>());
+		}
 	}
 }

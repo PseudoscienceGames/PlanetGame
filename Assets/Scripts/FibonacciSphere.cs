@@ -6,7 +6,7 @@ public class FibonacciSphere : MonoBehaviour
 {
 	public GameObject test;
 	public float radius;
-	public List<GameObject> sections = new List<GameObject>();
+	public List<Section> sections = new List<Section>();
 	//public float inc;
 	public bool add;
 	public bool go;
@@ -34,13 +34,13 @@ public class FibonacciSphere : MonoBehaviour
 	public void AddSection()
 	{
 		GameObject currentTest = Instantiate(test) as GameObject;
-		sections.Add(currentTest);
-		//UpdateSections();
+		sections.Add(currentTest.GetComponent<Section>());
+		UpdateSections();
 	}
 
 	public void RemoveSection(int i)
 	{
-		GameObject section = sections[i];
+		Section section = sections[i];
 		sections.RemoveAt(i);
 		Destroy(section);
 		UpdateSections();
@@ -62,16 +62,12 @@ public class FibonacciSphere : MonoBehaviour
 			float z = Mathf.Sin(phi) * r;
 			Vector3 loc = new Vector3(x, y, z);
 			//sections[i].transform.position = loc * radius;
-            sections[i].GetComponent<Section>().MoveInstant(loc * radius);
+            sections[i].MoveInstant(loc * radius);
 		}
 	}
 
 	public IEnumerator FindSphereSize()
 	{
-		foreach (GameObject section in sections)
-		{
-			section.GetComponent<Section>().SetRadius(.5f);
-		}
 		touch = false;
 		int secCount = sections.Count;
 
@@ -80,11 +76,14 @@ public class FibonacciSphere : MonoBehaviour
 			sphereSize = secCount;
 			UpdateSections();
 			yield return null;
-			foreach(GameObject section in sections)
+			foreach(Section section in sections)
 			{
-				if (section.GetComponent<Section>().neighbors.Count > 0)
+				
+				Collider[] cols = Physics.OverlapSphere(section.transform.position, 0.5f);
+				foreach (Collider col in cols)
 				{
-					touch = true;
+					if (col.GetComponent<Section>() != null && col.GetComponent<Section>() != section)
+						touch = true;
 				}
 			}
 			if (!touch)
@@ -92,9 +91,10 @@ public class FibonacciSphere : MonoBehaviour
 			else secCount--;
 				yield return null;
 		}
-		foreach (GameObject section in sections)
+
+		foreach(Section section in sections)
 		{
-			section.GetComponent<Section>().SetRadius(.75f);
+			section.CheckNeighbors();
 		}
 	}
 }

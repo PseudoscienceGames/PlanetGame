@@ -20,7 +20,7 @@ public class Selector : MonoBehaviour
 					{
 						sel1 = hit.transform.gameObject;
 					}
-					else if (sel1 != null && sel2 == null && sel1.GetComponent<Section>().neighbors.Contains(hit.transform))
+					else if (sel1 != null && sel2 == null && sel1.GetComponent<Section>().neighbors.Contains(hit.transform.GetComponent<Section>()))
 					{
 						sel2 = hit.transform.gameObject;
 						Vector3 loc1 = sel1.transform.position;
