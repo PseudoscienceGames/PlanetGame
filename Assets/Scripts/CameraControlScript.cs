@@ -88,4 +88,9 @@ public class CameraControlScript : MonoBehaviour
 			touchGap = Vector2.Distance(Input.touches[0].position, Input.touches[1].position);
 		}
 	}
+
+	//public void FocusCamera(Vector3 pos)
+	//{
+	//	cameraPivot.transform.LookAt(-pos);
+	//}
 }

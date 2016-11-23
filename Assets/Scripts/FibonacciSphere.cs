@@ -4,36 +4,27 @@ using System.Collections.Generic;
 
 public class FibonacciSphere : MonoBehaviour
 {
-	public GameObject test;
 	public float radius;
 	public List<Section> sections = new List<Section>();
 	//public float inc;
-	public bool add;
-	public bool go;
-	public bool update;
 	public int at;
 	public float lastRadius;
 	public int sphereSize;
 	public bool touch;
+	public List<GameObject> startingSections = new List<GameObject>();
 
-	void Update()
+	void Start()
 	{
-		if(go)
+		foreach(GameObject prefab in startingSections)
 		{
-			go = false;
-			AddSection();
+			AddSection(prefab);
 		}
-		if(update)
-		{
-			update = false;
-			StartCoroutine(FindSphereSize());
-//			UpdateSections();
-		}
+		StartCoroutine(FindSphereSize());
 	}
 
-	public void AddSection()
+	public void AddSection(GameObject prefab)
 	{
-		GameObject currentTest = Instantiate(test) as GameObject;
+		GameObject currentTest = Instantiate(prefab) as GameObject;
 		sections.Add(currentTest.GetComponent<Section>());
 		UpdateSections();
 	}
@@ -48,7 +39,8 @@ public class FibonacciSphere : MonoBehaviour
 
 	public void UpdateSections()
 	{
-
+		if (sphereSize < sections.Count)
+			sphereSize = sections.Count;
 		//StopAllCoroutines();
 		radius = GameObject.Find("Asteroid").GetComponent<Asteroid>().radius + 0.5f;
 		float offset = 2 / (float)sphereSize;
@@ -63,6 +55,10 @@ public class FibonacciSphere : MonoBehaviour
 			Vector3 loc = new Vector3(x, y, z);
 			//sections[i].transform.position = loc * radius;
             sections[i].MoveInstant(loc * radius);
+		}
+		foreach (Section section in sections)
+		{
+			section.CheckNeighbors();
 		}
 	}
 
@@ -89,7 +85,8 @@ public class FibonacciSphere : MonoBehaviour
 			if (!touch)
 				secCount++;
 			else secCount--;
-				yield return null;
+
+			yield return null;
 		}
 
 		foreach(Section section in sections)

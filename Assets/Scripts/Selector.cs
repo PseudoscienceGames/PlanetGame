@@ -14,11 +14,13 @@ public class Selector : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit))
 			{
-				if(hit.transform.GetComponent<Section>() != null)
+				if (hit.transform.GetComponent<Section>() != null)
 				{
 					if (sel1 == null)
 					{
 						sel1 = hit.transform.gameObject;
+						transform.position = sel1.transform.position;
+						//Camera.main.transform.root.GetComponent<CameraControlScript>().FocusCamera(transform.position);
 					}
 					else if (sel1 != null && sel2 == null && sel1.GetComponent<Section>().neighbors.Contains(hit.transform.GetComponent<Section>()))
 					{
@@ -29,10 +31,17 @@ public class Selector : MonoBehaviour
 						StartCoroutine(sel1.GetComponent<Section>().Move(loc2));
 						sel1 = null;
 						sel2 = null;
-
+						transform.position = Vector3.zero;
+                        GameObject.Find("Planet").GetComponent<FibonacciSphere>().UpdateSections();
 					}
-					
+
 				}
+			}
+			else
+			{
+				sel1 = null;
+				sel2 = null;
+				transform.position = Vector3.zero;
 			}
 		}
 

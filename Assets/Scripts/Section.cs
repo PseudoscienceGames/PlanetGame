@@ -48,7 +48,7 @@ public class Section : MonoBehaviour
 			yield return null;
 		}
 		yield return null;
-	}
+    }
 
 	void Update()
 	{
@@ -91,7 +91,7 @@ public class Section : MonoBehaviour
 		neighbors.Clear();
 		foreach(Collider col in cols)
 		{
-			if(col.GetComponent<Section>() != null && col.GetComponent<Section>() != this)
+			if (col.GetComponent<Section>() != null && col.GetComponent<Section>() != this)
 				neighbors.Add(col.GetComponent<Section>());
 		}
 	}
