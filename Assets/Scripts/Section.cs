@@ -34,13 +34,14 @@ public class Section : MonoBehaviour
 	{
 		transform.position = pos;
 		transform.LookAt(Vector3.zero);
+		transform.parent.GetComponent<FibonacciSphere>().UpdateSections();
 	}
 
 	public IEnumerator Move(Vector3 loc)
 	{
 		float time = 0;
 		Vector3 oldLoc = transform.position;
-		while (transform.position != loc)
+		while (time < 1)
 		{
 			time += Time.deltaTime * 10f;
 			transform.position = Vector3.Lerp(oldLoc, loc, time);
@@ -48,7 +49,8 @@ public class Section : MonoBehaviour
 			yield return null;
 		}
 		yield return null;
-    }
+		transform.parent.GetComponent<FibonacciSphere>().UpdateSections();
+	}
 
 	void Update()
 	{
